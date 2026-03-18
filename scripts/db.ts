@@ -1,0 +1,102 @@
+// --- bun db.ts
+// import { Database } from 'bun:sqlite';
+
+// --- tsx db.ts
+import Database from 'better-sqlite3'
+
+const db = new Database('./data/digest-history.db', { create: true });
+db.exec(`
+  CREATE TABLE IF NOT EXISTS keyword_trends (
+    keyword TEXT PRIMARY KEY,
+    first_seen TEXT,
+    last_seen TEXT,
+    streak INTEGER DEFAULT 1,
+    total_mentions INTEGER DEFAULT 0,
+    today_mentions INTEGER DEFAULT 0,
+    categories TEXT,
+    sample_titles TEXT
+  );
+`);
+
+export function updateKeywordTrends(articles: ScoredArticle[]) {
+  const today = new Date().toISOString().slice(0, 10);
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+
+  db.transaction(() => {
+    for (const art of articles) {
+      for (const kw of art.keywords || []) {
+        const normKw = kw.trim().toLowerCase(); // 可进一步规范化，如去除标点
+        if (!normKw) continue;
+
+        // 查询旧记录
+        const row = db.prepare('SELECT * FROM keyword_trends WHERE keyword = ?').get(normKw);
+
+        let newStreak = 1;
+        let newTotal = (row?.total_mentions || 0) + 1;
+        let newToday = (row?.today_mentions || 0) + 1;
+        let cats = new Set(JSON.parse(row?.categories || '[]'));
+        cats.add(art.category);
+        let titles = JSON.parse(row?.sample_titles || '[]');
+        titles.unshift(art.title); // 新标题放前面
+        titles = titles.slice(0, 5); // 保留最近 5 个
+
+        if (row) {
+          if (row.last_seen === yesterday) {
+            newStreak = row.streak + 1;
+          }
+          // 更新
+          db.prepare(`
+            UPDATE keyword_trends SET
+              last_seen = ?, streak = ?, total_mentions = ?, today_mentions = ?,
+              categories = ?, sample_titles = ?
+            WHERE keyword = ?
+          `).run(today, newStreak, newTotal, newToday, JSON.stringify([...cats]), JSON.stringify(titles), normKw);
+        } else {
+          // 插入新
+          db.prepare(`
+            INSERT INTO keyword_trends (keyword, first_seen, last_seen, streak, total_mentions, today_mentions, categories, sample_titles)
+            VALUES (?, ?, ?, 1, 1, 1, ?, ?)
+          `).run(normKw, today, today, JSON.stringify([...cats]), JSON.stringify([art.title]));
+        }
+      }
+    }
+  })();
+}
+
+export function getKeywordTrendsSummary(limit = 5): string {
+  const rows = db.prepare(`
+    SELECT * FROM keyword_trends
+    WHERE streak >= 2 OR today_mentions >= 3
+    ORDER BY streak DESC, today_mentions DESC, total_mentions DESC
+    LIMIT ?
+  `).all(limit);
+
+  if (rows.length === 0) return '(今日暂无明显连续趋势)';
+
+  let text = '**📈 高频关键词**\n';
+  for (const r of rows) {
+    text += `> ${r.keyword}: 连续${r.streak} 天 ${r.total_mentions} 次，（今日 ${r.today_mentions} 次）\n`;
+
+  }
+  return text;
+}
+
+export function getHistoricalTrendsForScoring(limit = 8): string {
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+
+  const rows = db.prepare(`
+    SELECT * FROM keyword_trends
+    WHERE last_seen <= ?
+      AND (streak >= 2 OR total_mentions >= 5)
+    ORDER BY streak DESC, total_mentions DESC
+    LIMIT ?
+  `).all(yesterday, limit);
+
+  if (rows.length === 0) return '(截至昨日暂无显著连续趋势)';
+
+  let text = '### 截至昨日的关键词历史趋势（用于辅助 scoring 判断 timeliness 和 relevance）\n';
+  for (const r of rows) {
+    text += `- **${r.keyword}**：连续 ${r.streak} 天（最后出现 ${r.last_seen}），累计 ${r.total_mentions} 次，涉及 ${JSON.parse(r.categories || '[]').join(' / ')}\n`;
+  }
+  return text;
+}
