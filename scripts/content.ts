@@ -7,6 +7,7 @@ import { FEED_CONCURRENCY, FEED_FETCH_TIMEOUT_MS } from './utils';
 import { Article, FeedConfig, stripHtml, logger } from './utils';
 import { humanizeTime, generateAsciiBarChart } from './utils';
 import { CategoryId, CATEGORY_META, ScoredArticle } from './utils';
+import { TfIdf, WordTokenizer } from "natural";
 
 // ============================================================================
 // Proxy（从配置读取）
@@ -130,6 +131,66 @@ export async function fetchAllFeeds(feeds: FeedConfig[]): Promise<Article[]> {
 // article deduplication
 // ============================================================================
 
+
+const tokenizer = new WordTokenizer();
+
+// 相似度阈值（可调）
+const TITLE_SIM_THRESHOLD = 0.8;
+
+// 文本归一化
+function normalize(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^\w\s]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+// 构建 TF-IDF
+function buildTfIdf(articles: Article[]): TfIdf {
+  const tfidf = new TfIdf();
+
+  for (const article of articles) {
+    tfidf.addDocument(normalize(article.title));
+  }
+
+  return tfidf;
+}
+
+// 获取某一文档的向量（Map形式）
+function getVector(tfidf: TfIdf, docIndex: number): Map<string, number> {
+  const map = new Map<string, number>();
+
+  tfidf.listTerms(docIndex).forEach(term => {
+    map.set(term.term, term.tfidf);
+  });
+
+  return map;
+}
+
+// cosine similarity
+function cosineSimilarity(a: Map<string, number>, b: Map<string, number>): number {
+  let dot = 0;
+  let normA = 0;
+  let normB = 0;
+
+  for (const [term, valA] of a.entries()) {
+    normA += valA * valA;
+    const valB = b.get(term);
+    if (valB) {
+      dot += valA * valB;
+    }
+  }
+
+  for (const valB of b.values()) {
+    normB += valB * valB;
+  }
+
+  if (normA === 0 || normB === 0) return 0;
+
+  return dot / (Math.sqrt(normA) * Math.sqrt(normB));
+}
+
 function normalizeUrl(url: string): string {
     if (!url || typeof url !== 'string') {
         return '';
@@ -175,26 +236,65 @@ function normalizeUrl(url: string): string {
 }
 
 export function deduplicateArticles(articles: Article[]): Article[] {
-    const seen = new Map<string, Article>();
+  // ---------- 第一阶段：URL 精确去重 ----------
+  const seenByUrl = new Map<string, Article>();
 
-    for (const article of articles) {
-        if (!article.link || !article.title) {
-            continue;
+  for (const article of articles) {
+    if (!article.link || !article.title || !article.pubDate ) continue;
+
+    const key = normalizeUrl(article.link);
+    const existing = seenByUrl.get(key);
+
+    if (!existing || article.pubDate > existing.pubDate) {
+      seenByUrl.set(key, article);
+    }
+  }
+
+  const urlDeduped = Array.from(seenByUrl.values());
+
+  // ---------- 第二阶段：TF-IDF title 相似去重 ----------
+  const tfidf = buildTfIdf(urlDeduped);
+  const vectors = urlDeduped.map((_, i) => getVector(tfidf, i));
+
+  const visited = new Array(urlDeduped.length).fill(false);
+  const result: Article[] = [];
+
+  for (let i = 0; i < urlDeduped.length; i++) {
+    if (visited[i]) continue;
+
+    let best = urlDeduped[i];
+
+    for (let j = i + 1; j < urlDeduped.length; j++) {
+      if (visited[j]) continue;
+
+      // 👉 可选性能优化（长度过滤）
+      if (
+        Math.abs(
+          urlDeduped[i].title.length - urlDeduped[j].title.length
+        ) > 20
+      ) {
+        continue;
+      }
+
+      const sim = cosineSimilarity(vectors[i], vectors[j]);
+
+      if (sim >= TITLE_SIM_THRESHOLD) {
+        visited[j] = true;
+
+        // 保留最新文章
+        if (urlDeduped[j].pubDate > best.pubDate) {
+          best = urlDeduped[j];
         }
-
-        const normLink = normalizeUrl(article.link);
-        let key = normLink;
-
-        const existing = seen.get(key);
-        if (!existing || article.pubDate > existing.pubDate) {
-            seen.set(key, article);
-        }
+      }
     }
 
-    const unique = Array.from(seen.values());
-    unique.sort((a, b) => b.pubDate.getTime() - a.pubDate.getTime());
+    result.push(best);
+  }
 
-    return unique;
+  // ---------- 排序 ----------
+  result.sort((a, b) => b.pubDate.getTime() - a.pubDate.getTime());
+
+  return result;
 }
 
 
@@ -207,8 +307,11 @@ export function generateDigestReport(articles: ScoredArticle[], highlights: stri
 
   let report = `# 📰 新闻快报 — ${now.toLocaleString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}\n\n`;
 
-  const trendsText = getKeywordTrendsSummary(6);
-  report += ` ${trendsText}\n\n`;
+  const trendsData = getKeywordTrendsSummary();
+  const trendsText = trendsData.slice(0, 6).map(t => 
+    `${t.keyword}: 连续${t.streak}天${t.today_mentions}次，（今日${t.today_mentions}次）`
+  ).join('\n');
+  report += ` **高频关键字**\n> ${trendsText.split('\n').join('\n> ')}\n\n`;
 
   if (highlights) {
     report += `## 📝 今日看点\n\n`;

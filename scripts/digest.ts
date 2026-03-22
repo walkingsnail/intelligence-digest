@@ -17,9 +17,9 @@ async function main(): Promise<void> {
 
   let hours = config.general.default_hours;
   let topN = config.general.default_top_n;
-  let lang = config.general.default_lang;
-  const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-  let outputPath = `${config.general.output_dir}/digest-${dateStr}.md`;
+  let lang = config.general.default_lang as "zh" | "en";
+  // const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+  let outputPath = `${config.general.output_dir}/digest.md`;
 
   for (let i = 0; i < args.length; i++) {
     const arg = args[i]!;
@@ -134,7 +134,10 @@ async function main(): Promise<void> {
 
   logger.info(`[digest] ------------------------------------`);
   logger.info(`[digest] Step 5/5: Generating today's highlights...`);
-  const latestTrends = getKeywordTrendsSummary(8);
+  const latestTrendsData = getKeywordTrendsSummary();
+  const latestTrends = latestTrendsData.slice(0, 8).map(t => 
+    `${t.keyword}: 连续${t.streak}天${t.today_mentions}次，（今日${t.today_mentions}次）`
+  ).join('\n');
   const highlights = await generateHighlights(config, finalArticles, aiClient, lang, latestTrends);
 
   const successfulSources = new Set(allArticles.map(a => a.sourceName));
@@ -150,9 +153,10 @@ async function main(): Promise<void> {
   // WordPress发布
   const wp_title = report.split("\n")[0].slice(1);
   const wp_post = {
+    config: config,
     title: wp_title,
     content: report_html,
-    status: "publish",
+    status: "publish" as "publish" | "draft" | "private",
     categories: [23]
   };
   createPost(config, wp_post);

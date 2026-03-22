@@ -36,91 +36,10 @@
           "valid": true
         },
         {
-          "name": "The New York Times Politics",
-          "xmlUrl": "https://rss.nytimes.com/services/xml/rss/nyt/Politics.xml",
-          "htmlUrl": "https://www.nytimes.com/",
-          "note": "The New York Times Politics",
-          "active": true,
-          "lastChecked": "2026-03-16T05:54:47.236Z",
-          "valid": true
-        },
-        {
-          "name": "The New York Times US",
-          "xmlUrl": "https://rss.nytimes.com/services/xml/rss/nyt/US.xml",
-          "htmlUrl": "https://www.nytimes.com/",
-          "note": "The New York Times US",
-          "active": true,
-          "lastChecked": "2026-03-16T05:54:47.236Z",
-          "valid": true
-        },
-        {
-          "name": "WSJ World News",
-          "xmlUrl": "https://feeds.content.dowjones.io/public/rss/RSSWorldNews",
-          "htmlUrl": "https://www.wsj.com/",
-          "note": "WSJ World News",
-          "active": true,
-          "lastChecked": "2026-03-16T05:54:47.236Z",
-          "valid": true
-        },
-        {
-          "name": "WSJ Politics",
-          "xmlUrl": "https://feeds.content.dowjones.io/public/rss/socialpoliticsfeed",
-          "htmlUrl": "https://www.wsj.com/",
-          "note": "WSJ Politics",
-          "active": true,
-          "lastChecked": "2026-03-16T05:54:47.236Z",
-          "valid": true
-        },
-        {
-          "name": "WSJ US News",
-          "xmlUrl": "https://feeds.content.dowjones.io/public/rss/RSSUSnews",
-          "htmlUrl": "https://www.wsj.com/",
-          "note": "WSJ US News",
-          "active": true,
-          "lastChecked": "2026-03-16T05:54:47.236Z",
-          "valid": true
-        },
-        {
-          "name": "Politico News",
-          "xmlUrl": "https://quanwenrss.com/politico",
-          "htmlUrl": "www.politico.com",
-          "note": "Politico News",
-          "active": true,
-          "lastChecked": "2026-03-16T05:54:47.236Z",
-          "valid": true
-        },
-        {
-          "name": "Politico Trade News",
-          "xmlUrl": "https://quanwenrss.com/politico/trade",
-          "htmlUrl": "www.politico.com",
-          "note": "Politico Trade News",
-          "active": true,
-          "lastChecked": "2026-03-16T05:54:47.236Z",
-          "valid": true
-        },
-        {
           "name": "warontherocks.com",
           "xmlUrl": "https://warontherocks.com/feed/",
           "htmlUrl": "https://warontherocks.com",
           "note": "warontherocks.com",
-          "active": true,
-          "lastChecked": "2026-03-16T05:54:48.668Z",
-          "valid": true
-        },
-        {
-          "name": "foreignaffairs.com",
-          "xmlUrl": "https://www.foreignaffairs.com/rss.xml",
-          "htmlUrl": "https://www.foreignaffairs.com",
-          "note": "foreignaffairs.com",
-          "active": true,
-          "lastChecked": "2026-03-16T05:54:48.668Z",
-          "valid": true
-        },
-        {
-          "name": "Foreign Policy",
-          "xmlUrl": "https://foreignpolicy.com/feed/",
-          "htmlUrl": "https://foreignpolicy.com/",
-          "note": "foreignpolicy.com",
           "active": true,
           "lastChecked": "2026-03-16T05:54:48.668Z",
           "valid": true
@@ -160,15 +79,6 @@
           "active": true,
           "lastChecked": "2026-03-16T05:54:48.668Z",
           "valid": true
-        },
-        {
-          "name": "The Diplomat",
-          "xmlUrl": "https://thediplomat.com/feed/",
-          "htmlUrl": "https://thediplomat.com",
-          "note": "The Diplomat",
-          "active": true,
-          "lastChecked": "2026-03-16T05:54:48.668Z",
-          "valid": true
         }
       ]
     },
@@ -178,39 +88,12 @@
       "emoji": "📈",
       "feeds": [
         {
-          "name": "BBC Business",
-          "xmlUrl": "https://quanwenrss.com/bbc/business",
-          "htmlUrl": "https://www.bbc.com/business",
-          "note": "BBC Business",
-          "active": true,
-          "lastChecked": "2026-03-16T05:54:48.668Z",
-          "valid": true
-        },
-        {
-          "name": "The New York Times Business",
-          "xmlUrl": "https://rss.nytimes.com/services/xml/rss/nyt/Business.xml",
-          "htmlUrl": "https://www.nytimes.com/",
-          "note": "The New York Times Business",
-          "active": true,
-          "lastChecked": "2026-03-16T05:54:48.668Z",
-          "valid": true
-        },
-        {
           "name": "The New York Times Economy",
           "xmlUrl": "https://rss.nytimes.com/services/xml/rss/nyt/Economy.xml",
           "htmlUrl": "https://www.nytimes.com/",
           "note": "The New York Times Economy",
           "active": true,
           "lastChecked": "2026-03-16T05:54:48.668Z",
-          "valid": true
-        },
-        {
-          "name": "WSJ Market News",
-          "xmlUrl": "https://feeds.content.dowjones.io/public/rss/RSSMarketsMain",
-          "htmlUrl": "https://www.wsj.com/",
-          "note": "WSJ Market News",
-          "active": true,
-          "lastChecked": "2026-03-16T05:54:50.452Z",
           "valid": true
         },
         {
@@ -223,37 +106,10 @@
           "valid": true
         },
         {
-          "name": "WSJ US Business",
-          "xmlUrl": "https://feeds.content.dowjones.io/public/rss/WSJcomUSBusiness",
-          "htmlUrl": "https://www.wsj.com/",
-          "note": "WSJ US Business",
-          "active": true,
-          "lastChecked": "2026-03-16T05:54:50.452Z",
-          "valid": true
-        },
-        {
-          "name": "bloomberg.com - Business",
-          "xmlUrl": "https://www.bloomberg.com/feeds/business/news.rss",
-          "htmlUrl": "https://www.bloomberg.com/business",
-          "note": "bloomberg.com - Business",
-          "active": true,
-          "lastChecked": "2026-03-16T05:54:50.452Z",
-          "valid": true
-        },
-        {
           "name": "bloomberg.com - Economics",
           "xmlUrl": "https://www.bloomberg.com/feeds/economics/news.rss",
           "htmlUrl": "https://www.bloomberg.com/economics",
           "note": "bloomberg.com - Economics",
-          "active": true,
-          "lastChecked": "2026-03-16T05:54:50.452Z",
-          "valid": true
-        },
-        {
-          "name": "bloomberg.com - Markets",
-          "xmlUrl": "https://www.bloomberg.com/feeds/markets/news.rss",
-          "htmlUrl": "https://www.bloomberg.com/markets",
-          "note": "bloomberg.com - Markets",
           "active": true,
           "lastChecked": "2026-03-16T05:54:50.452Z",
           "valid": true
@@ -293,24 +149,6 @@
           "active": true,
           "lastChecked": "2026-03-16T05:54:50.452Z",
           "valid": true
-        },
-        {
-          "name": "Politico Finace",
-          "xmlUrl": "https://quanwenrss.com/politico/finance",
-          "htmlUrl": "www.politico.com",
-          "note": "Politico Finace",
-          "active": true,
-          "lastChecked": "2026-03-16T05:54:52.075Z",
-          "valid": true
-        },
-        {
-          "name": "Morgan Stanley",
-          "xmlUrl": "https://quanwenrss.com/morganstanley/global",
-          "htmlUrl": "https://www.morganstanley.com/",
-          "note": "Morgan Stanley",
-          "active": true,
-          "lastChecked": "2026-03-16T05:54:52.075Z",
-          "valid": true
         }
       ]
     },
@@ -320,28 +158,10 @@
       "emoji": "🤖",
       "feeds": [
         {
-          "name": "BBC Technology",
-          "xmlUrl": "https://quanwenrss.com/bbc/technology",
-          "htmlUrl": "https://www.bbc.com/technology",
-          "note": "BBC Technology",
-          "active": true,
-          "lastChecked": "2026-03-16T05:54:52.075Z",
-          "valid": true
-        },
-        {
           "name": "The New York Times Technology",
           "xmlUrl": "https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml",
           "htmlUrl": "https://www.nytimes.com/",
           "note": "The New York Times Technology",
-          "active": true,
-          "lastChecked": "2026-03-16T05:54:52.075Z",
-          "valid": true
-        },
-        {
-          "name": "The New York Times Science",
-          "xmlUrl": "https://rss.nytimes.com/services/xml/rss/nyt/Science.xml",
-          "htmlUrl": "https://www.nytimes.com/",
-          "note": "The New York Times Science",
           "active": true,
           "lastChecked": "2026-03-16T05:54:52.075Z",
           "valid": true
@@ -356,28 +176,10 @@
           "valid": true
         },
         {
-          "name": "bloomberg.com - Technology",
-          "xmlUrl": "https://www.bloomberg.com/feeds/technology/news.rss",
-          "htmlUrl": "https://www.bloomberg.com/technology",
-          "note": "bloomberg.com - Technology",
-          "active": true,
-          "lastChecked": "2026-03-16T05:54:52.075Z",
-          "valid": true
-        },
-        {
           "name": "OpenAI Blog",
           "xmlUrl": "https://openai.com/news/rss.xml",
           "htmlUrl": "https://openai.com/",
           "note": "OpenAI Blog",
-          "active": true,
-          "lastChecked": "2026-03-16T05:54:52.075Z",
-          "valid": true
-        },
-        {
-          "name": "Hacker News",
-          "xmlUrl": "https://hnrss.org/newest",
-          "htmlUrl": "https://news.ycombinator.com/",
-          "note": "Hacker News",
           "active": true,
           "lastChecked": "2026-03-16T05:54:52.075Z",
           "valid": true
@@ -462,15 +264,6 @@
           "active": true,
           "lastChecked": "2026-03-16T05:54:55.610Z",
           "valid": true
-        },
-        {
-          "name": "Politico Technology",
-          "xmlUrl": "https://quanwenrss.com/politico/technology",
-          "htmlUrl": "www.politico.com",
-          "note": "Politico Technology",
-          "active": true,
-          "lastChecked": "2026-03-16T05:54:55.610Z",
-          "valid": true
         }
       ]
     },
@@ -527,15 +320,6 @@
           "xmlUrl": "https://www.troyhunt.com/rss/",
           "htmlUrl": "https://troyhunt.com",
           "note": "troyhunt.com",
-          "active": true,
-          "lastChecked": "2026-03-16T05:54:57.125Z",
-          "valid": true
-        },
-        {
-          "name": "Schneier on Security",
-          "xmlUrl": "https://www.schneier.com/blog/atom.xml",
-          "htmlUrl": "https://www.schneier.com",
-          "note": "Schneier on Security",
           "active": true,
           "lastChecked": "2026-03-16T05:54:57.125Z",
           "valid": true
@@ -604,15 +388,6 @@
           "xmlUrl": "https://asiatimes.com/feed/",
           "htmlUrl": "https://www.scmp.com/",
           "note": "Asia Times",
-          "active": true,
-          "lastChecked": "2026-03-16T05:54:57.125Z",
-          "valid": true
-        },
-        {
-          "name": "Morgan Stanley - Chinae",
-          "xmlUrl": "https://quanwenrss.com/morganstanley/china",
-          "htmlUrl": "https://www.morganstanleychina.com/",
-          "note": "摩根士丹利 - 中国",
           "active": true,
           "lastChecked": "2026-03-16T05:54:57.125Z",
           "valid": true
